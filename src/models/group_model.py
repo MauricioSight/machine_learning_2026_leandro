@@ -18,7 +18,7 @@ def build_group_model(seed: int = 42):
     # 1) TabPFN-2.5
     from tabpfn import TabPFNClassifier
 
-    return TabPFNClassifier(random_state=seed, device="auto")
+    return TabPFNClassifier(random_state=seed, device="cuda")
 
     # 2) TabICL v2
     # from tabicl import TabICLClassifier
