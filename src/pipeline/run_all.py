@@ -10,6 +10,17 @@ import argparse
 from pathlib import Path
 
 import pandas as pd
+import sys
+from pathlib import Path
+
+# Sobe duas pastas a partir do run_tune.py:
+# 1. pipeline -> src
+# 2. src -> machine_learning_2026_leandro (raiz)
+caminho_raiz = str(Path(__file__).resolve().parents[2])
+
+# Adiciona a pasta raiz ao sistema de buscas do Python
+if caminho_raiz not in sys.path:
+    sys.path.append(caminho_raiz)
 
 from data.load_tabarena import RECOMMENDED_TASK_IDS, load_task
 from src.models.baselines import BASELINE_FACTORIES

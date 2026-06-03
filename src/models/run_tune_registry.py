@@ -27,8 +27,8 @@ def build_tabpfn(params: dict[str, Any], seed: int = 42):
 
 def tabpfn_search_space(trial: optuna.Trial) -> dict[str, Any]:
     return {
-        "N_ensemble_configurations": trial.suggest_categorical(
-            "N_ensemble_configurations",
+        "n_estimators": trial.suggest_categorical(
+            "n_estimators",
             [8, 16, 32],
         ),
     }
@@ -42,13 +42,14 @@ def tabpfn_search_space(trial: optuna.Trial) -> dict[str, Any]:
 def build_lightgbm(params: dict[str, Any], seed: int = 42):
     return LGBM_TD_Classifier(
         random_state=seed,
+        verbose = -1,
         **params,
     )
 
 
 def lightgbm_search_space(trial: optuna.Trial) -> dict[str, Any]:
     return {
-        "learning_rate": trial.suggest_float(
+        "lr": trial.suggest_float(
             "learning_rate",
             1e-3,
             0.3,
@@ -135,13 +136,13 @@ def build_catboost(params: dict[str, Any], seed: int = 42):
 
 def catboost_search_space(trial: optuna.Trial) -> dict[str, Any]:
     return {
-        "learning_rate": trial.suggest_float(
+        "lr": trial.suggest_float(
             "learning_rate",
             1e-3,
             0.3,
             log=True,
         ),
-        "depth": trial.suggest_int(
+        "max_depth": trial.suggest_int(
             "depth",
             4,
             10,
