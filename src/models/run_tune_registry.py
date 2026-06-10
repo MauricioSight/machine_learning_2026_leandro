@@ -42,7 +42,6 @@ def tabpfn_search_space(trial: optuna.Trial) -> dict[str, Any]:
 def build_lightgbm(params: dict[str, Any], seed: int = 42):
     return LGBM_TD_Classifier(
         random_state=seed,
-        verbose = -1,
         **params,
     )
 

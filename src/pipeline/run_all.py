@@ -8,6 +8,8 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import gc      
+import torch    
 
 import pandas as pd
 import sys
@@ -69,6 +71,15 @@ def main() -> None:
             factories["group_model"] = build_group_model
 
         for model_name, factory in factories.items():
+            
+            # ==========================================
+            # INÍCIO DA LIMPEZA DE MEMÓRIA DA GPU
+            # ==========================================
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+            # ==========================================
+
             estimator = factory(args.seed)
             metrics = fit_predict_evaluate(estimator, X_train, y_train, X_test, y_test)
             row = {"task_id": task_id, "dataset": ds.name, "model": model_name}
