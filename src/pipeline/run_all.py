@@ -8,8 +8,8 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-import gc      
-import torch    
+import gc
+import torch
 
 import pandas as pd
 import sys
@@ -70,8 +70,9 @@ def main() -> None:
         if args.include_group_model:
             factories["group_model"] = build_group_model
 
+        header_written = False
         for model_name, factory in factories.items():
-            
+
             # ==========================================
             # INÍCIO DA LIMPEZA DE MEMÓRIA DA GPU
             # ==========================================
@@ -90,7 +91,14 @@ def main() -> None:
                 f"ACC={metrics.accuracy:.4f}, time={metrics.fit_time_s + metrics.predict_time_s:.1f}s"
             )
 
-    pd.DataFrame(rows).to_csv(args.output, index=False)
+            pd.DataFrame([row]).to_csv(
+                args.output,
+                mode="a",
+                header=not header_written,
+                index=False,
+            )
+            header_written = True
+
     print(f"\nResultados gravados em {args.output}")
 
 
