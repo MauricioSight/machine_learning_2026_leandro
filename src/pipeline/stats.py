@@ -32,7 +32,7 @@ def demsar_analysis(
     Returns:
         dict com 'ranking' (Series) e 'autorank_result' (objeto autorank).
     """
-    result = autorank(results, alpha=0.05, verbose=False, order="descending")
+    result = autorank(results, alpha=0.05, verbose=False, order="descending",force_mode="nonparametric",)
     ranking = pd.Series(result.rankdf["meanrank"], name="mean_rank").sort_values()
 
     if output_dir is not None:

@@ -10,7 +10,7 @@ import argparse
 from pathlib import Path
 import gc
 import torch
-
+import numpy as np
 import pandas as pd
 import sys
 from pathlib import Path
@@ -29,6 +29,7 @@ from src.models.baselines import BASELINE_FACTORIES
 from src.models.group_model import build_group_model
 from src.pipeline.evaluate import fit_predict_evaluate
 from src.pipeline.split import stratified_split
+from src.models.automl import build_autogluon
 
 
 def parse_args() -> argparse.Namespace:
@@ -66,7 +67,12 @@ def main() -> None:
         ds = load_task(task_id)
         X_train, X_test, y_train, y_test = stratified_split(ds.X, ds.y, seed=args.seed)
 
-        factories: dict[str, callable] = dict(BASELINE_FACTORIES)
+        factories: dict[str, callable] = {}
+
+        # Registra placeholders para o IF interceptar lá dentro do loop
+        #factories["autogluon_default"] = lambda seed: None 
+        factories["autogluon_extreme"] = lambda seed: None
+
         if args.include_group_model:
             factories["group_model"] = build_group_model
 
@@ -80,9 +86,64 @@ def main() -> None:
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
             # ==========================================
+            # --- IDENTIFICA SE É O AUTOGLUON ---
+            if "autogluon" in model_name:
+                # Determina o preset com base no nome que você escolheu na factory
+                preset_type = "extreme" if "extreme" in model_name else "default"
+                
+                # 1. Chama a sua função original para pegar a tupla (retorna o predictor desconfigurado)
+                # Passamos o nome da coluna alvo que vamos criar temporariamente
+                target_col = "__target_label__"
 
-            estimator = factory(args.seed)
-            metrics = fit_predict_evaluate(estimator, X_train, y_train, X_test, y_test)
+                num_classes = len(np.unique(y_train))
+                if num_classes == 2:
+                    eval_metric = "roc_auc"
+                else:
+                    # Usa a métrica multiclasse original se for > 2
+                    eval_metric = "roc_auc_ovo_macro"
+                limite_tempo = 14400 if preset_type == "extreme" else None
+
+                predictor, ag_preset, time_limit = build_autogluon(
+                    label=target_col,
+                    eval_metric = eval_metric, 
+                    seed=args.seed, 
+                    preset=preset_type,
+                    time_limit_seconds=limite_tempo
+                )
+                
+                # 2. Prepara os dados: Une X_train e y_train em um único DataFrame
+                train_data = X_train.copy()
+                train_data[target_col] = y_train
+
+                
+                # 3. Executa o treinamento nativo do AutoGluon (passando os parâmetros da tupla)
+                print(f"[{ds.name}] Iniciando treino do AutoGluon ({preset_type})...")
+                
+                # Configurando hyperparameters para a v1.4 caso seja o extreme
+                hyperparameters = "multimodal" if preset_type == "extreme" else "default"
+                
+                estimator = predictor.fit(
+                    train_data=train_data,
+                    presets=ag_preset,
+                    time_limit=time_limit,
+                    hyperparameters=hyperparameters
+                )
+                
+                # Criamos um "adaptador rápido" em tempo de execução para que o seu 
+                # evaluate.py consiga chamar .predict() e .predict_proba() sem quebrar
+                class AGAdapter:
+                    def __init__(self, pred): self.pred = pred
+                    def fit(self, X, y): pass # Já foi treinado acima
+                    def predict(self, X): return self.pred.predict(X).values
+                    def predict_proba(self, X): return self.pred.predict_proba(X).values
+                
+                eval_estimator = AGAdapter(estimator)
+                
+            else:
+                # Fluxo normal para LightGBM, XGBoost, CatBoost e o modelo do grupo
+                estimator = factory(args.seed)
+                eval_estimator = estimator
+            metrics = fit_predict_evaluate(eval_estimator, X_train, y_train, X_test, y_test)
             row = {"task_id": task_id, "dataset": ds.name, "model": model_name}
             row.update(metrics.to_dict())
             rows.append(row)

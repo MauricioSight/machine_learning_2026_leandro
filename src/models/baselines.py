@@ -18,17 +18,17 @@ from pytabkit import (
 
 def build_lightgbm(seed: int = 42) -> LGBM_TD_Classifier:
     """LightGBM com defaults meta-tunados (TD) do pytabkit."""
-    return LGBM_TD_Classifier(random_state=seed)
+    return LGBM_TD_Classifier(random_state=seed,verbosity=0)
 
 
 def build_xgboost(seed: int = 42) -> XGB_TD_Classifier:
     """XGBoost com defaults meta-tunados (TD) do pytabkit."""
-    return XGB_TD_Classifier(random_state=seed)
+    return XGB_TD_Classifier(random_state=seed,verbosity=0)
 
 
 def build_catboost(seed: int = 42) -> CatBoost_TD_Classifier:
     """CatBoost com defaults meta-tunados (TD) do pytabkit."""
-    return CatBoost_TD_Classifier(random_state=seed)
+    return CatBoost_TD_Classifier(random_state=seed,verbosity=0)
 
 
 BASELINE_FACTORIES: dict[str, Callable[[int], object]] = {

@@ -11,6 +11,7 @@ from autogluon.tabular import TabularPredictor
 
 def build_autogluon(
     label: str,
+    eval_metric: str,
     seed: int = 42,
     preset: str = "default",
     time_limit_seconds: int | None = None,
@@ -32,7 +33,7 @@ def build_autogluon(
 
     predictor = TabularPredictor(
         label=label,
-        eval_metric="roc_auc_ovo_macro",
+        eval_metric=eval_metric,
         verbosity=2,
     )
     return predictor, presets_map[preset], time_limit_seconds
