@@ -1,4 +1,4 @@
-# Model Card: <Nome do Modelo>
+# Model Card: TabPFN-2.5
 
 > Preencha este template para o modelo principal atribuído ao seu grupo. Substitua os campos `<...>` pelos valores reais. Não deixe campos em branco; use "N/A" quando não aplicável.
 >
@@ -6,26 +6,26 @@
 
 ## 1. Detalhes do modelo
 
-- **Nome:** <ex.: TabPFN-2.5>
-- **Versão:** <ex.: 2.5.1>
-- **Autores originais:** <ex.: Hollmann et al., 2025>
-- **Repositório oficial:** <URL>
-- **Licença do código:** <ex.: Apache 2.0>
-- **Licença dos pesos pré-treinados (se aplicável):** <ex.: não-comercial; uso acadêmico permitido>
-- **Família arquitetural:** <ex.: foundation model transformer com in-context learning>
-- **Contagem de parâmetros:** <ex.: 25M; reportar treináveis vs. fixos quando aplicável>
-- **Complexidade computacional:** <tempo e memória em função de n e p; ex.: O(n^2 p) em treino, O(np) em inferência>
-- **Pico de memória observado:** <ex.: 7,2 GB em datasets do regime grande>
-- **Toolkit / dependências:** <ex.: tabpfn 2.5, pytorch 2.x, CUDA 12 opcional>
+- **Nome:**  TabPFN-2.5
+- **Versão:** 2.5
+- **Autores originais:** L. Grinsztajn et al., 2026
+- **Repositório oficial:** (https://github.com/PriorLabs/TabPFN)
+- **Licença do código:** ex.: Apache 2.0
+- **Licença dos pesos pré-treinados (se aplicável):** Licença Proprietária/Prior Labs (gratuita para uso não-comercial acadêmico, exigindo registro e geração de token de API)
+- **Família arquitetural:** O sistema é um Foundation Model Tabular estruturado através de uma rede Transformer. Opera usando aprendizado em contexto (in-context learning) e mecanismos de atenção alternada (sobre características e amostras).
+- **Contagem de parâmetros:** Não está explícito no artigo de base. Todavia, a profundidade arquitetural da rede conta com 18 camadas focadas em regressão e 24 camadas para tarefas de classificação
+- **Complexidade computacional:** A complexidade do algoritmo é expressa matematicamente como $\mathcal{O}(r^{2}\min(c,500)+r\min(c,500)^{2})$, onde $r$ representa o total de linhas da base e $c$ a quantidade de colunas do conjunto.  
+- **Pico de memória observado:** 16Gb durante o processamento do modelo
+- **Toolkit / dependências:** tabpfn>=2.5, torch 2.x, recomendado a utilização de GPU
 - **Hiperparâmetros principais:** <listar; indicar se foi feita busca via Optuna>
 
 ## 2. Uso pretendido
 
-- **Caso de uso primário:** classificação supervisionada em dados tabulares.
-- **Casos de uso fora de escopo:** <ex.: dados não-IID, séries temporais, dados de imagem, dados textuais brutos sem tokenização>
-- **Usuários pretendidos:** <ex.: pesquisadores e praticantes de ML em problemas tabulares com benchmarks padronizados>
-- **Faixa de n suportada:** <ex.: até 50.000 amostras com bom desempenho; subamostragem ou destilação acima disso>
-- **Faixa de p suportada:** <ex.: até 2.000 features numéricas; categóricas exigem one-hot ou embedding prévio>
+- **Caso de uso primário:** Tarefas baseadas em dados tabulares para regressão e classificação multivariada que exijam capacidade avançada de generalização com calibração confiável numa única passagem direta do modelo. Também demonstra eficiência destacada como meta-learner para estimativas formais em inferência causal.
+- **Casos de uso fora de escopo:** Não especificada no artigo de forma estrita. Porém, inferências complexas sem destilação e em proporções excedendo largamente a casa das centenas de milhares de linhas exigem processamentos alternativos não ideais.
+- **Usuários pretendidos:**O sistema foi formulado visando atender pesquisadores, desenvolvedores na área médica, cientistas de modelagem ecológica e atuários do setor financeiro que lidam rotineiramente com o problema de escassez crônica de dados
+- **Faixa de n suportada:** Desenvolvido organicamente para atuar com extrema eficiência processando de zero a 50.000 amostras individuais de treinamento. Em benchmarks padronizados obteve resultados estáveis em escalas de até 100.000 registros de treino.
+- **Faixa de p suportada:** Adequado para conjuntos estruturados possuindo até o máximo prático de 2.000 propriedades independentes (features) de classificação ou regressão.
 - **Condições operacionais:** <ex.: requer GPU com pelo menos 8 GB de VRAM para inferência rápida em datasets médios>
 
 ## 3. Fatores observados
@@ -66,9 +66,9 @@ Tabela agregada nos 30 datasets do TabArena. Reportar média, desvio padrão e i
 
 ## 6. Dados de treino e pré-treino
 
-- **Modelo é foundation model pré-treinado, treinado do zero ou híbrido?** <responder>
-- **Origem dos dados de pré-treino (se aplicável):** <ex.: 130M de datasets sintéticos gerados pelos autores>
-- **Origem dos dados de treino direto (se aplicável):** <ex.: pesos inicializados aleatoriamente; treino direto nos splits do projeto>
+- **Modelo é foundation model pré-treinado, treinado do zero ou híbrido?** TabPFN-2.5 trata-se essencialmente de um Foundation Model tabular pré-treinado maciçamente.
+- **Origem dos dados de pré-treino (se aplicável):** Os conhecimentos prévios e distribuições base utilizadas na fase massiva de metatransformação do modelo provêm integralmente de milhões de distribuições sintéticas que emulam dados tabulares heterogêneos
+- **Origem dos dados de treino direto (se aplicável):** Existe também a variante do modelo chamada Real-TabPFN-2.5 que inclui aperfeiçoamento residual e fine-tuning contínuo derivado de 43 conjuntos puros originários do mundo real curados no ecossistema OpenML e Kaggle.
 - **Possíveis vieses herdados do pré-treino:** <descrever; relevante para foundation models>
 
 ## 7. Análise quantitativa
@@ -96,7 +96,7 @@ Tabela agregada nos 30 datasets do TabArena. Reportar média, desvio padrão e i
 ## 10. Reprodutibilidade
 
 - **Ambiente:** Python <3.11>, dependências fixadas em `pyproject.toml`.
-- **Hardware utilizado:** <CPU/GPU, RAM, tempo total de execução>
+- **Hardware utilizado:** GPU NVIDIA GeForce RTX 5060 ti 16GB, 32GB de RAM, tempo total de execução>
 - **Comandos para reproduzir:**
   ```bash
   uv sync
@@ -106,7 +106,7 @@ Tabela agregada nos 30 datasets do TabArena. Reportar média, desvio padrão e i
 
 ## 11. Referências
 
-- <citação do paper original do modelo>
+- L. Grinsztajn, K. Flöge, O. Key, F. Birkel, P. Jund, B. Roof, B. Jäger, D. Safaric,S. Alessi, A. Hayler, M. Manium, R. Yu, F. Jablonski, S. B. Hoo, A. Garg,J. Robertson, M. Bühler, V. Moroshan, L. Purucker, C. Cornu, L. C. Wehrhahn,A. Bonetto, B. Schölkopf, S. Gambhir, N. Hollmann, and F. Hutter, “Tabpfn-2.5:Advancing the state of the art in tabular foundation models,” 2026. [Online].Available: https://arxiv.org/abs/2511.08667
 - Mitchell, M. et al. (2019). Model Cards for Model Reporting. FAT*.
 - Demsar, J. (2006). Statistical comparisons of classifiers over multiple datasets. JMLR.
 - Benavoli, A., Corani, G., Demsar, J., Zaffalon, M. (2017). Time for a Change: a Tutorial for Comparing Multiple Classifiers Through Bayesian Analysis. JMLR.
