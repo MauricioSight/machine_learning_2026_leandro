@@ -31,7 +31,7 @@ Dimensões em que o desempenho do modelo varia, avaliadas neste projeto sobre os
 - **Tamanho do dataset (n):** Altamente escalável para os regimes médio (1.000 a 10.000) e grande (> 10.000), mantendo liderança. No regime pequeno (< 1.000), o modelo apresenta leve desvantagem frente a ensembles massivos, mas segue competitivo.
 - **Número de classes:** Robusto tanto em classificação binária quanto multiclasse, entregando ganhos estáveis em relação aos baselines de árvore em ambos.
 - **Proporção entre features categóricas e numéricas:** Demonstrou ser invariante à densidade categórica, garantindo a melhor performance em datasets de alta e baixa proporção sem degradação na codificação.
-- **Presença de valores ausentes:** Com NaN, sofre degradação natural de precisão, contudo mitiga a perda significativamente melhor do que os métodos de gradient boosting isolados (sem imputação manual prévia).
+- **Presença de valores ausentes:** O conjunto de dados foi tratado anteriormente para não apresentar valores ausetes.
 
 ## 4. Métricas alcançadas
 
