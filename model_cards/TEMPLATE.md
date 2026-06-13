@@ -13,7 +13,7 @@
 - **Complexidade computacional:** A complexidade do algoritmo é expressa matematicamente como $\mathcal{O}(r^{2}\min(c,500)+r\min(c,500)^{2})$, onde $r$ representa o total de linhas da base e $c$ a quantidade de colunas do conjunto.
 - **Pico de memória observado:** 16GB durante o processamento do modelo.
 - **Toolkit / dependências:** tabpfn>=2.5, torch 2.x, pytabkit (recomendada a utilização de GPU).
-- **Hiperparâmetros principais:** Busca estruturada conduzida via Optuna, utilizando validação cruzada no conjunto de treinamento.
+- **Hiperparâmetros principais:** Não utilizado pois segundo o site dos desenvolvedores do modelo, o modelo já se adapta no tempo de inferência adicionando falor apenas em alguns cenários específicos
 
 ## 2. Uso pretendido
 
