@@ -50,7 +50,6 @@ Tabela agregada nos 30 datasets do TabArena. Reportar média, desvio padrão e i
 - **Tamanho:** pequeno: AUC=0,869; médio: AUC=0,882; grande: AUC=0,849
 - **Número de classes:** binário: AUC=0,861; multiclasse: AUC=0,914
 - **Proporção categórica:** baixa: AUC=0,875; alta: AUC=0,868
-- **Missing values:** com NaN: AUC=0,828; sem NaN: AUC=0,883
 
 ## 5. Dados de avaliação
 
@@ -69,7 +68,7 @@ Tabela agregada nos 30 datasets do TabArena. Reportar média, desvio padrão e i
 
 ## 7. Análise quantitativa
 
-- **Posição no ranking médio entre os 15 sistemas avaliados** (10 modelos atribuíveis + 3 baselines + 2 AutoGluon): 1 de 15.
+- **Posição no ranking médio entre os sistemas avaliados** : 1 de 6.
 - **Friedman + Nemenyi:** O modelo rejeita a hipótese nula com superioridade estatisticamente significante contra LightGBM, CatBoost e XGBoost. Foi inserido no mesmo grupo de equivalência estatística (barra do diagrama de diferença crítica) que o AutoGluon Default e Extreme.
 - **Bayesian signed-rank com ROPE = 0,01 em AUC:** Atestou-se forte equivalência prática contra AutoGluon Extreme (p_equivalente = 0,992) e AutoGluon Default (p_equivalente = 0,991). O modelo do grupo é claramente melhor que o XGBoost (p_melhor = 1,000), CatBoost (0,997) e LightGBM (0,938).
 - **Comparação com AutoGluon:** Atingiu o mesmo teto de performance do preset extreme 4h consumindo apenas ~30% do tempo de processamento. Contra o preset default, apresenta leve incremento de AUC (0,872 vs 0,866) com custo de tempo de 3,7x.
