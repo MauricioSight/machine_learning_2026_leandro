@@ -67,10 +67,10 @@ def main() -> None:
         ds = load_task(task_id)
         X_train, X_test, y_train, y_test = stratified_split(ds.X, ds.y, seed=args.seed)
 
-        factories: dict[str, callable] = {}
+        factories: dict[str, callable] = dict(BASELINE_FACTORIES)
 
         # Registra placeholders para o IF interceptar lá dentro do loop
-        #factories["autogluon_default"] = lambda seed: None 
+        factories["autogluon_default"] = lambda seed: None 
         factories["autogluon_extreme"] = lambda seed: None
 
         if args.include_group_model:
@@ -111,12 +111,10 @@ def main() -> None:
                     time_limit_seconds=limite_tempo
                 )
                 
-                # 2. Prepara os dados: Une X_train e y_train em um único DataFrame
                 train_data = X_train.copy()
                 train_data[target_col] = y_train
 
                 
-                # 3. Executa o treinamento nativo do AutoGluon (passando os parâmetros da tupla)
                 print(f"[{ds.name}] Iniciando treino do AutoGluon ({preset_type})...")
                 
                 # Configurando hyperparameters para a v1.4 caso seja o extreme
@@ -129,8 +127,7 @@ def main() -> None:
                     hyperparameters=hyperparameters
                 )
                 
-                # Criamos um "adaptador rápido" em tempo de execução para que o seu 
-                # evaluate.py consiga chamar .predict() e .predict_proba() sem quebrar
+                # Os tempos de fit correto foram inseridos após o treinamento através da pasta salva pelo autogluon
                 class AGAdapter:
                     def __init__(self, pred): self.pred = pred
                     def fit(self, X, y): pass # Já foi treinado acima
