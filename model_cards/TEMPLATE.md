@@ -50,6 +50,7 @@ Tabela agregada nos 30 datasets do TabArena. Reportar média, desvio padrão e i
 - **Tamanho:** pequeno: AUC=0,869; médio: AUC=0,882; grande: AUC=0,849
 - **Número de classes:** binário: AUC=0,861; multiclasse: AUC=0,914
 - **Proporção categórica:** baixa: AUC=0,875; alta: AUC=0,868
+- **Missing values:** com NaN: AUC=0,828; sem NaN: AUC=0,883
 
 ## 5. Dados de avaliação
 
