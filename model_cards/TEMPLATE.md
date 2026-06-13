@@ -55,9 +55,9 @@ Tabela agregada nos 30 datasets do TabArena. Reportar média, desvio padrão e i
 ## 5. Dados de avaliação
 
 - **Origem:** 30 datasets do TabArena-v0.1 (NeurIPS 2025), via OpenML.
-- **Distribuição por regime:** 10 pequenos + 10 médios + 10 grandes.
+- **Distribuição por regime:** 3 pequenos + 19 médios + 8 grandes.
 - **Estratégia de split:** 70/30 estratificado por classe, seed=42.
-- **Pré-processamento aplicado:** Imputação intrínseca da rede e transformações gerenciadas pelas interfaces unificadas (pytabkit). Sem injeção de feature engineering agressiva manual.
+- **Pré-processamento aplicado:** Foi adicionado o valor da mediana em valores nulos numéricos. E em variáveis categóricas foi adicionado o valor 'Missing' antes da conversão em códigos numéricos
 - **Lista dos datasets utilizados:** Relação completa e detalhada presente no corpo do Relatório de experimentos do grupo.
 
 ## 6. Dados de treino e pré-treino
