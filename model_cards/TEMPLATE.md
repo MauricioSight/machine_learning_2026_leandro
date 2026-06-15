@@ -97,4 +97,4 @@ Tabela agregada nos 30 datasets do TabArena. Reportar média, desvio padrão e i
   ```bash
   uv sync
   python -m src.pipeline.run_all-include-group-model --seed 42
-- **Hash do commit:** <git rev-parse HEAD>
+- **Hash do commit:** 0b6b9f5dbf92d07f2010bcae8491d1041173ac6b
